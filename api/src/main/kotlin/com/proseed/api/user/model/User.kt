@@ -3,22 +3,26 @@ package com.proseed.api.user.model
 import jakarta.persistence.*
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.time.LocalDateTime
 
 @Entity
-@Table(name = "_user")
+@Table(name = "USER")
 data class User(
     @Id @GeneratedValue
-    val id: Int? = null,
+    val id: Long? = null,
     val nickName: String,
+    @Column(unique = true)
     val email: String,
     val platformId: String,
     val platformType: String,
     val profileImageUrl: String, // TODO: Default Image Url
+    val preference: String? = null,
     @Enumerated(EnumType.STRING)
-    val role: Role
+    val role: Role,
+    val createdTime: LocalDateTime = LocalDateTime.now()
 ) : UserDetails {
 
-    constructor() : this(null,"","","","","",Role.USER) // NoArgsConstructor
+    constructor() : this(null,"","","","","","",Role.USER) // NoArgsConstructor
 
     // UserDetails Implements
     override fun getAuthorities(): List<SimpleGrantedAuthority> {

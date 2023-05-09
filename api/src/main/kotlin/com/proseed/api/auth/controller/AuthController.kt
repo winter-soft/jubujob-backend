@@ -7,9 +7,11 @@ import com.proseed.api.auth.dto.kakao.KakaoLoginPageResponse
 import com.proseed.api.auth.dto.kakao.KakaoTokenResponse
 import com.proseed.api.auth.service.AuthService
 import com.proseed.api.config.exception.user.UserNotFoundException
+import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.User
 import com.proseed.api.user.repository.UserRepository
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -51,10 +53,11 @@ class AuthController(
     }
 
     @GetMapping("/valid")
+    @PreAuthorize("hasRole('USER')")
     fun isValidToken(
         @AuthenticationPrincipal user: User
-    ): User {
-        return user
+    ): UserResponse {
+        return UserResponse(user)
     }
 
     @PostMapping("/test")

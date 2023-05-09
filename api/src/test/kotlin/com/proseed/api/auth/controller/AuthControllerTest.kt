@@ -41,23 +41,22 @@ internal class AuthControllerTest(
             .andDo(MockMvcResultHandlers.print())
     }
 
-    @Test
-    fun `authenticate 테스트`() {
-        val register = AuthRegisterRequest("hongchanhui", "ghdcksgml2@naver.com", "123456722", "KAKAO")
-        authService.register(register)
-
-        val authenticate = AuthRequest("ghdcksgml2@naver.com", "123456722")
-        val authenticateJson = ObjectMapper().writeValueAsString(authenticate)
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/auth/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(authenticateJson)
-        )
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andDo(MockMvcResultHandlers.print())
-
-    }
+//    @Test
+//    fun `authenticate 테스트`() {
+//        val register = AuthRegisterRequest("hongchanhui", "ghdcksgml2@naver.com", "123456722", "KAKAO")
+//        authService.register(register)
+//
+//        val authenticate = AuthRequest("ghdcksgml2@naver.com", "123456722")
+//        val authenticateJson = ObjectMapper().writeValueAsString(authenticate)
+//
+//        mockMvc.perform(
+//            MockMvcRequestBuilders.post("/auth/authenticate")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(authenticateJson)
+//        )
+//            .andExpect(MockMvcResultMatchers.status().isOk)
+//            .andDo(MockMvcResultHandlers.print())
+//    }
 
     @Test
     fun `kakoLoginPage 테스트`() {

@@ -37,6 +37,7 @@ class AuthService(
             platformId = passwordEncoder.encode(request.platformId),
             platformType = request.platformType,
             profileImageUrl = "",
+
             role = Role.USER)
 
         val savedUser = userRepository.save(user)

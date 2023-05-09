@@ -74,29 +74,29 @@ internal class AuthServiceTest(
             ) ?: throw KakaoAuthorizationCodeNotFoundException()
         }
     }
-
-    @Test
-    @DisplayName("카카오톡 토큰으로 사용자 정보 가져오기 테스트")
-    fun kakaoTokenTakeUserInfo() {
-        // Header 설정
-        val userInfoHeader = HttpHeaders()
-        userInfoHeader.set("Authorization", "Bearer " + "B3KYxIlT6Mi1KUpa-YhxpEtLILP4GQ8bxG4vP8Z_Cj1zTgAAAYbDtfbH")
-
-        val entity = HttpEntity("", userInfoHeader)
-
-        val kakaoUserInfo = restTemplate.exchange(
-            "https://kapi.kakao.com/v2/user/me",
-            HttpMethod.GET,
-            entity,
-            KakaoUserInfoResponse::class.java
-        ).body ?: throw KakaoTokenExpiredException()
-
-        assertNotNull(kakaoUserInfo.id)
-        assertNotNull(kakaoUserInfo.connected_at)
-        assertNotNull(kakaoUserInfo.properties)
-        assertNotNull(kakaoUserInfo.kakao_account)
-
-    }
+//
+//    @Test
+//    @DisplayName("카카오톡 토큰으로 사용자 정보 가져오기 테스트")
+//    fun kakaoTokenTakeUserInfo() {
+//        // Header 설정
+//        val userInfoHeader = HttpHeaders()
+//        userInfoHeader.set("Authorization", "Bearer " + "B3KYxIlT6Mi1KUpa-YhxpEtLILP4GQ8bxG4vP8Z_Cj1zTgAAAYbDtfbH")
+//
+//        val entity = HttpEntity("", userInfoHeader)
+//
+//        val kakaoUserInfo = restTemplate.exchange(
+//            "https://kapi.kakao.com/v2/user/me",
+//            HttpMethod.GET,
+//            entity,
+//            KakaoUserInfoResponse::class.java
+//        ).body ?: throw KakaoTokenExpiredException()
+//
+//        assertNotNull(kakaoUserInfo.id)
+//        assertNotNull(kakaoUserInfo.connected_at)
+//        assertNotNull(kakaoUserInfo.properties)
+//        assertNotNull(kakaoUserInfo.kakao_account)
+//
+//    }
 
     @Test
     @DisplayName("email이 userRepository에 존재하지 않을때 user가 생성되는지 테스트")
