@@ -1,5 +1,6 @@
 package com.proseed.api.user.model
 
+import com.proseed.api.common.model.TimeZone
 import jakarta.persistence.*
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -10,19 +11,34 @@ import java.time.LocalDateTime
 data class User(
     @Id @GeneratedValue
     val id: Long? = null,
+
+    val platformId: String,
+    val platformType: String,
+    @Enumerated(EnumType.STRING)
+    val role: Role,
     val nickName: String,
     @Column(unique = true)
     val email: String,
-    val platformId: String,
-    val platformType: String,
+    val phoneNumber: String? = null,
+    val gender: String? = "male",
     val profileImageUrl: String, // TODO: Default Image Url
     val preference: String? = null,
-    @Enumerated(EnumType.STRING)
-    val role: Role,
-    val createdTime: LocalDateTime = LocalDateTime.now()
-) : UserDetails {
+    val messageCheck: Boolean? = false,
+    val registerStage: Int
+) : UserDetails, TimeZone() {
 
-    constructor() : this(null,"","","","","","",Role.USER) // NoArgsConstructor
+    constructor() : this(
+        id = null,
+        platformId = "",
+        platformType = "",
+        role = Role.USER,
+        nickName = "",
+        email = "",
+        profileImageUrl = "",
+        preference = null,
+        messageCheck = false,
+        registerStage = 0
+    ) // NoArgsConstructor
 
     // UserDetails Implements
     override fun getAuthorities(): List<SimpleGrantedAuthority> {

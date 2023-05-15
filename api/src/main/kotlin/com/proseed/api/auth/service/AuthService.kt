@@ -8,6 +8,10 @@ import com.proseed.api.config.exception.auth.kakao.KakaoAuthorizationCodeNotFoun
 import com.proseed.api.config.exception.auth.kakao.KakaoTokenExpiredException
 import com.proseed.api.config.jwt.JwtService
 import com.proseed.api.config.exception.user.UserNotFoundException
+import com.proseed.api.config.exception.user.UserNotRegisterException
+import com.proseed.api.config.exception.user.UserRegisterStageInValidException
+import com.proseed.api.config.exception.user.UserUnAuthorizationMessageCheckException
+import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.Role
 import com.proseed.api.user.model.User
 import com.proseed.api.user.repository.UserRepository
@@ -19,9 +23,11 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 
 @Service
+@Transactional(readOnly = true)
 class AuthService(
     private val userRepository: UserRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
@@ -30,21 +36,6 @@ class AuthService(
     private val kakaoValueBuilder: KakaoValueBuilder,
     private val restTemplate: RestTemplate
 ) {
-    fun register(request: AuthRegisterRequest): AuthResponse {
-        var user = User(
-            nickName = request.nickName,
-            email = request.email,
-            platformId = passwordEncoder.encode(request.platformId),
-            platformType = request.platformType,
-            profileImageUrl = "",
-
-            role = Role.USER)
-
-        val savedUser = userRepository.save(user)
-        var jwtToken = jwtService.generateToken(savedUser)
-
-        return AuthResponse(jwtToken)
-    }
 
     fun authenticate(request: AuthRequest): AuthResponse {
         authenticationManager.authenticate(
@@ -101,18 +92,21 @@ class AuthService(
         // 만약 이미 존재한다면 user정보를 가져오고 jwt토큰 생성
         // user 정보가 존재하지 않는다면, user정보를 등록하고 jwt토큰 생성
 
-        var user = userRepository.findByEmail(email)
+        var user = userRepository.findByEmailAndMessageCheckAndRegisterStage(email, true, 3)
 
         if (user == null) { // 회원가입
             user = userRepository.save(
                 User(
-                    nickName = kakaoUserInfo.properties.nickname,
-                    email = email,
                     platformId = passwordEncoder.encode(kakaoUserInfo.id),
                     platformType = "KAKAO",
+                    role = Role.USER,
+                    nickName = kakaoUserInfo.properties.nickname,
+                    email = email,
                     profileImageUrl = kakaoUserInfo.properties.profile_image,
-                    role = Role.USER
+                    registerStage = 0
                 ))
+
+            throw UserNotRegisterException(user)
         } else  { // 닉네임, 프로필 사진 업데이트
             user.copy(
                 nickName = kakaoUserInfo.properties.nickname,
@@ -126,4 +120,76 @@ class AuthService(
         return AuthResponse(jwtToken)
     }
 
+    // stage1
+    fun registerStage1(request: KakaoRegisterStage1Request): UserResponse {
+        // messageCheck = 1 검증
+        val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
+
+        if (user.messageCheck == false) {
+            throw UserUnAuthorizationMessageCheckException()
+        }
+
+        // 사용자 정보 업데이트 registerStage = 1로 변경
+        user.copy(
+            nickName = request.nickName,
+            gender = request.gender,
+            phoneNumber = request.phoneNumber,
+            registerStage = 1
+        )
+        // 내용 저장
+        val savedUser = userRepository.save(user)
+
+        // 회원가입 결과 반환
+        return UserResponse(savedUser)
+    }
+
+    // stage2
+    fun registerStage2(request: KakaoRegisterStage2Request): UserResponse {
+        // messageCheck = 1, registerStage = 1 검증
+        val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
+
+        if (user.messageCheck == false) {
+            throw UserUnAuthorizationMessageCheckException()
+        } else if (user.registerStage != 1) {
+            throw UserRegisterStageInValidException()
+        }
+
+        // userPreference, registerStage = 2 로 업데이트
+        user.copy(
+            preference = request.preference,
+            registerStage = 2
+        )
+
+        // 내용 저장
+        val savedUser = userRepository.save(user)
+
+        // 회원가입 결과 반환
+        return UserResponse(savedUser)
+    }
+
+    // stage3
+    fun registerStage3(request: KakaoRegisterStage3Request): AuthResponse {
+        // messageCheck = 1, registerStage = 2 검증
+        val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
+
+        if (user.messageCheck == false) {
+            throw UserUnAuthorizationMessageCheckException()
+        } else if (user.registerStage != 2) {
+            throw UserRegisterStageInValidException()
+        }
+
+        // userPreference, registerStage = 3 로 업데이트
+        user.copy(
+            registerStage = 3
+        )
+
+        // 내용 저장
+        val savedUser = userRepository.save(user)
+
+        // jwt 토큰 발급
+        val jwtToken = jwtService.generateToken(savedUser)
+
+        // 회원가입 결과 반환
+        return AuthResponse(jwtToken)
+    }
 }

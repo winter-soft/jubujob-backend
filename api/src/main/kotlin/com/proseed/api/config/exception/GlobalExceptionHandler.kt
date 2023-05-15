@@ -1,5 +1,6 @@
 package com.proseed.api.config.exception
 
+import com.proseed.api.config.exception.user.UserNotRegisterException
 import com.proseed.api.utils.logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,5 +18,12 @@ class GlobalExceptionHandler {
         logger.info("ApiException Running..")
 
         return ResponseEntity(ExceptionDto(message = exception.message ?: "에러발생"), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(value = [UserNotRegisterException::class])
+    fun userNotRegisterException(exception: UserNotRegisterException): ResponseEntity<UserNotRegisterException.UserRegisterDto> {
+        logger.info("UserNotRegisterException Running..")
+
+        return ResponseEntity(exception.errorMessage(), HttpStatus.BAD_REQUEST)
     }
 }

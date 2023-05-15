@@ -1,17 +1,17 @@
 package com.proseed.api.auth.controller
 
-import com.proseed.api.auth.dto.AuthRegisterRequest
 import com.proseed.api.auth.dto.AuthRequest
 import com.proseed.api.auth.dto.AuthResponse
 import com.proseed.api.auth.dto.kakao.KakaoLoginPageResponse
-import com.proseed.api.auth.dto.kakao.KakaoTokenResponse
+import com.proseed.api.auth.dto.kakao.KakaoRegisterStage1Request
+import com.proseed.api.auth.dto.kakao.KakaoRegisterStage2Request
+import com.proseed.api.auth.dto.kakao.KakaoRegisterStage3Request
 import com.proseed.api.auth.service.AuthService
 import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.User
 import com.proseed.api.user.repository.UserRepository
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -35,13 +35,27 @@ class AuthController(
         return ResponseEntity.ok(authService.kakaoTokenProvider(code))
     }
 
+    // 회원가입 단계
 
-    @PostMapping("/register")
-    fun register(
-        @RequestBody request: AuthRegisterRequest
+    @PostMapping("/kakao/register/stage1")
+    fun registerStage1(
+        @RequestBody(required = true) request: KakaoRegisterStage1Request
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity.ok(authService.registerStage1(request))
+    }
+
+    @PostMapping("/kakao/register/stage2")
+    fun registerStage2(
+        @RequestBody(required = true) request: KakaoRegisterStage2Request
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity.ok(authService.registerStage2(request))
+    }
+
+    @PostMapping("/kakao/register/stage3")
+    fun registerStage3(
+        @RequestBody(required = true) request: KakaoRegisterStage3Request
     ): ResponseEntity<AuthResponse> {
-
-        return ResponseEntity.ok(authService.register(request))
+        return ResponseEntity.ok(authService.registerStage3(request))
     }
 
     @PostMapping("/authenticate")
@@ -53,7 +67,6 @@ class AuthController(
     }
 
     @GetMapping("/valid")
-    @PreAuthorize("hasRole('USER')")
     fun isValidToken(
         @AuthenticationPrincipal user: User
     ): UserResponse {
