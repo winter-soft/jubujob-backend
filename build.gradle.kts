@@ -34,6 +34,8 @@ subprojects {
 		implementation("org.jetbrains.kotlin:kotlin-reflect")
 		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+
+
 		compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
 
 		developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -41,9 +43,9 @@ subprojects {
 	}
 
 	dependencyManagement {
-		imports {
-			mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-		}
+//		imports {
+//			mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+//		}
 
 		dependencies {
 			dependency("net.logstash.logback:logstash-logback-encoder:6.6")
