@@ -14,6 +14,10 @@ dependencies {
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.261")
 
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
 
     // jwt 라이브러리 추가
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
