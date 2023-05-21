@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
-@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 class AuthController(
@@ -43,7 +42,7 @@ class AuthController(
     @GetMapping("/kakao/callback")
     fun kakaoTokenProvider(
         @Parameter(name = "code", required = true, example = "asklcjkdlsaasfjklasjfklsafa") @RequestParam("code") code: String
-    ): ResponseEntity<AuthResponse> {
+    ): ResponseEntity<Any> {
         return ResponseEntity.ok(authService.kakaoTokenProvider(code))
     }
 

@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 
 @Service
-@Transactional(readOnly = true)
 class AuthService(
     private val userRepository: UserRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
@@ -59,7 +58,7 @@ class AuthService(
     }
 
     // 토큰 발급 시스템
-    fun kakaoTokenProvider(code: String): AuthResponse {
+    fun kakaoTokenProvider(code: String): Any {
         // Header 설정
         val tokenRequestHeader = HttpHeaders()
         tokenRequestHeader.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -92,10 +91,10 @@ class AuthService(
         // 만약 이미 존재한다면 user정보를 가져오고 jwt토큰 생성
         // user 정보가 존재하지 않는다면, user정보를 등록하고 jwt토큰 생성
 
-        var user = userRepository.findByEmailAndMessageCheckAndRegisterStage(email, true, 3)
+        var user = userRepository.findByEmail(email)
 
         if (user == null) { // 회원가입
-            user = userRepository.save(
+            user = userRepository.saveAndFlush(
                 User(
                     platformId = passwordEncoder.encode(kakaoUserInfo.id),
                     platformType = "KAKAO",
@@ -106,12 +105,29 @@ class AuthService(
                     registerStage = 0
                 ))
 
-            throw UserNotRegisterException(user)
-        } else  { // 닉네임, 프로필 사진 업데이트
-            user.copy(
-                nickName = kakaoUserInfo.properties.nickname,
-                profileImageUrl = kakaoUserInfo.properties.profile_image
+            return KakaoRegisterStage0Response(
+                platformId = user.platformId,
+                platformType = user.platformType,
+                role = user.role.toString(),
+                nickName = user.nickName,
+                email = user.email,
+                profileImageUrl = user.profileImageUrl,
+                registerStage = 0
             )
+        } else if (user.registerStage != 3) { // 회원가입 절차를 마치지 않은 유저
+            return KakaoRegisterStage0Response(
+                platformId = user.platformId,
+                platformType = user.platformType,
+                role = user.role.toString(),
+                nickName = user.nickName,
+                email = user.email,
+                profileImageUrl = user.profileImageUrl,
+                registerStage = user.registerStage
+            )
+        } else  { // 닉네임, 프로필 사진 업데이트
+            user.nickName = kakaoUserInfo.properties.nickname
+            user.profileImageUrl = kakaoUserInfo.properties.profile_image
+
             user = userRepository.save(user)
         }
 
@@ -130,14 +146,12 @@ class AuthService(
         }
 
         // 사용자 정보 업데이트 registerStage = 1로 변경
-        user.copy(
-            nickName = request.nickName,
-            gender = request.gender,
-            phoneNumber = request.phoneNumber,
-            registerStage = 1
-        )
+        user.nickName = request.nickName
+        user.gender = request.gender
+        user.phoneNumber = request.phoneNumber
+        user.registerStage = 1
         // 내용 저장
-        val savedUser = userRepository.save(user)
+        val savedUser = userRepository.saveAndFlush(user)
 
         // 회원가입 결과 반환
         return UserResponse(savedUser)
@@ -155,10 +169,8 @@ class AuthService(
         }
 
         // userPreference, registerStage = 2 로 업데이트
-        user.copy(
-            preference = request.preference,
-            registerStage = 2
-        )
+        user.preference = request.preference
+        user.registerStage = 2
 
         // 내용 저장
         val savedUser = userRepository.save(user)
@@ -168,6 +180,7 @@ class AuthService(
     }
 
     // stage3
+    @Transactional
     fun registerStage3(request: KakaoRegisterStage3Request): AuthResponse {
         // messageCheck = 1, registerStage = 2 검증
         val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
@@ -179,9 +192,7 @@ class AuthService(
         }
 
         // userPreference, registerStage = 3 로 업데이트
-        user.copy(
-            registerStage = 3
-        )
+        user.registerStage = 3
 
         // 내용 저장
         val savedUser = userRepository.save(user)

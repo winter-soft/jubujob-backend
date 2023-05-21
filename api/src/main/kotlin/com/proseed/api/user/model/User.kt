@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "USER")
-data class User(
+class User(
     @Id @GeneratedValue
     val id: Long? = null,
 
@@ -16,15 +16,15 @@ data class User(
     val platformType: String,
     @Enumerated(EnumType.STRING)
     val role: Role,
-    val nickName: String,
+    var nickName: String,
     @Column(unique = true)
     val email: String,
-    val phoneNumber: String? = null,
-    val gender: String? = "male",
-    val profileImageUrl: String, // TODO: Default Image Url
-    val preference: String? = null,
-    val messageCheck: Boolean? = false,
-    val registerStage: Int
+    var phoneNumber: String? = null,
+    var gender: String? = "male",
+    var profileImageUrl: String, // TODO: Default Image Url
+    var preference: String? = null,
+    var messageCheck: Boolean? = false,
+    var registerStage: Int
 ) : UserDetails, TimeZone() {
 
     constructor() : this(
