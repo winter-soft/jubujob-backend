@@ -48,7 +48,9 @@ class AuthService(
         if(!passwordEncoder.matches(request.platformId, user.platformId))
             throw UserNotFoundException()
 
-        var jwtToken = jwtService.generateToken(user)
+        val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["role"] = user.role.toString()
+        var jwtToken = jwtService.generateToken(tokenHashMap, user)
 
         return AuthResponse(jwtToken)
     }
@@ -131,7 +133,9 @@ class AuthService(
             user = userRepository.save(user)
         }
 
-        val jwtToken = jwtService.generateToken(user)
+        val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["role"] = user.role.toString()
+        val jwtToken = jwtService.generateToken(tokenHashMap, user)
 
         return AuthResponse(jwtToken)
     }
@@ -198,7 +202,9 @@ class AuthService(
         val savedUser = userRepository.save(user)
 
         // jwt 토큰 발급
-        val jwtToken = jwtService.generateToken(savedUser)
+        val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["role"] = user.role.toString()
+        val jwtToken = jwtService.generateToken(tokenHashMap, savedUser)
 
         // 회원가입 결과 반환
         return AuthResponse(jwtToken)
