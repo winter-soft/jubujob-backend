@@ -49,6 +49,7 @@ class AuthService(
             throw UserNotFoundException()
 
         val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["id"] = user.id.toString()
         tokenHashMap["role"] = user.role.toString()
         var jwtToken = jwtService.generateToken(tokenHashMap, user)
 
@@ -134,6 +135,7 @@ class AuthService(
         }
 
         val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["id"] = user.id.toString()
         tokenHashMap["role"] = user.role.toString()
         val jwtToken = jwtService.generateToken(tokenHashMap, user)
 
@@ -203,6 +205,7 @@ class AuthService(
 
         // jwt 토큰 발급
         val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["id"] = user.id.toString()
         tokenHashMap["role"] = user.role.toString()
         val jwtToken = jwtService.generateToken(tokenHashMap, savedUser)
 

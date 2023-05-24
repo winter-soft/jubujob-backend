@@ -35,7 +35,7 @@ class JwtService(
     }
 
     fun generateToken(
-        extraClaims: Map<String, Object>,
+        extraClaims: HashMap<String, String>,
         userDetails: UserDetails
     ): String {
         return Jwts.builder() // Jwts 빌더를 사용해 JWT 토큰을 발급한다.
