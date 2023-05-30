@@ -4,7 +4,6 @@ import com.proseed.api.common.model.TimeZone
 import jakarta.persistence.*
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "USER")
@@ -12,6 +11,7 @@ class User(
     @Id @GeneratedValue
     val id: Long? = null,
 
+    // Parameter
     val platformId: String,
     val platformType: String,
     @Enumerated(EnumType.STRING)
@@ -38,7 +38,7 @@ class User(
         preference = null,
         messageCheck = false,
         registerStage = 0
-    ) // NoArgsConstructor
+            ) // NoArgsConstructor
 
     // UserDetails Implements
     override fun getAuthorities(): List<SimpleGrantedAuthority> {

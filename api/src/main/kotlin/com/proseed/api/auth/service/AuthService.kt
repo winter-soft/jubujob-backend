@@ -105,7 +105,8 @@ class AuthService(
                     nickName = kakaoUserInfo.properties.nickname,
                     email = email,
                     profileImageUrl = kakaoUserInfo.properties.profile_image,
-                    registerStage = 0
+                    registerStage = 0,
+                    messageCheck = true // 추후 삭제
                 ))
 
             return KakaoRegisterStage0Response(
