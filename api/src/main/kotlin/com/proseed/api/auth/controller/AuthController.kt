@@ -1,6 +1,5 @@
 package com.proseed.api.auth.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.proseed.api.auth.dto.AuthRequest
 import com.proseed.api.auth.dto.AuthResponse
 import com.proseed.api.auth.dto.kakao.KakaoLoginPageResponse
@@ -11,15 +10,9 @@ import com.proseed.api.auth.service.AuthService
 import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.User
-import com.proseed.api.user.repository.UserRepository
+import com.proseed.api.user.UserRepository
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.core.io.Resource
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*

@@ -1,4 +1,4 @@
-package com.proseed.api.user.repository
+package com.proseed.api.user
 
 import com.proseed.api.user.model.User
 import org.springframework.data.jpa.repository.JpaRepository

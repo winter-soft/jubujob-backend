@@ -1,6 +1,5 @@
 package com.proseed.api.auth.service
 
-import com.proseed.api.auth.dto.AuthRegisterRequest
 import com.proseed.api.auth.dto.AuthRequest
 import com.proseed.api.auth.dto.AuthResponse
 import com.proseed.api.auth.dto.kakao.*
@@ -8,13 +7,12 @@ import com.proseed.api.config.exception.auth.kakao.KakaoAuthorizationCodeNotFoun
 import com.proseed.api.config.exception.auth.kakao.KakaoTokenExpiredException
 import com.proseed.api.config.jwt.JwtService
 import com.proseed.api.config.exception.user.UserNotFoundException
-import com.proseed.api.config.exception.user.UserNotRegisterException
 import com.proseed.api.config.exception.user.UserRegisterStageInValidException
 import com.proseed.api.config.exception.user.UserUnAuthorizationMessageCheckException
 import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.Role
 import com.proseed.api.user.model.User
-import com.proseed.api.user.repository.UserRepository
+import com.proseed.api.user.UserRepository
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod

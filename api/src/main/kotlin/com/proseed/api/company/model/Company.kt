@@ -11,7 +11,7 @@ class Company(
     val id: Long? = null,
 
     // Foreign Key
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User?, // Not null
 

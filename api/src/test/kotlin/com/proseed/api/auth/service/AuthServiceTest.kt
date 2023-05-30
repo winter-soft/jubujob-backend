@@ -9,7 +9,7 @@
 //import com.proseed.api.config.exception.auth.kakao.KakaoTokenExpiredException
 //import com.proseed.api.user.model.Role
 //import com.proseed.api.user.model.User
-//import com.proseed.api.user.repository.UserRepository
+//import com.proseed.api.user.UserRepository
 //import org.junit.jupiter.api.Test
 //
 //import org.junit.jupiter.api.Assertions.*
