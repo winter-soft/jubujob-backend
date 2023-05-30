@@ -1,3 +1,5 @@
+
+
 plugins {
 
 }
@@ -18,6 +20,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+    runtimeOnly("org.aspectj:aspectjweaver:1.9.9.1")
+
 
     // jwt 라이브러리 추가
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
@@ -28,8 +33,16 @@ dependencies {
 
     testImplementation("org.springframework.security:spring-security-test")
     implementation(kotlin("stdlib"))
+
+    //querydsl 추가
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-core:5.0.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    kapt("com.querydsl:querydsl-kotlin-codegen:5.0.0")
 }
 repositories {
     mavenCentral()
 }
 
+//querydsl 추가
+val querydslDir = "$buildDir/generated/querydsl"
