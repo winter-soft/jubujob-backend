@@ -29,6 +29,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0")
+
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.security:spring-security-test")
