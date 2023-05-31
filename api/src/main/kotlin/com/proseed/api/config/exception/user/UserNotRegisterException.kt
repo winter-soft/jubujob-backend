@@ -1,6 +1,5 @@
 package com.proseed.api.config.exception.user
 
-import com.proseed.api.config.exception.ApiException
 import com.proseed.api.user.model.User
 
 class UserNotRegisterException(var user: User) : RuntimeException() {

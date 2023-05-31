@@ -1,5 +1,6 @@
 package com.proseed.api.common.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.PrePersist
 import jakarta.persistence.PreUpdate
@@ -7,8 +8,8 @@ import java.time.LocalDateTime
 
 @MappedSuperclass
 open class TimeZone(
-    var createdTime: LocalDateTime? = null,
-    var updatedTime: LocalDateTime? = null
+    @JsonIgnore var createdTime: LocalDateTime? = null,
+    @JsonIgnore var updatedTime: LocalDateTime? = null
 ) {
 
     @PrePersist

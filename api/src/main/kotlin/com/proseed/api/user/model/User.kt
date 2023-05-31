@@ -15,7 +15,7 @@ class User(
     val platformId: String,
     val platformType: String,
     @Enumerated(EnumType.STRING)
-    val role: Role,
+    var role: Role,
     var nickName: String,
     @Column(unique = true)
     val email: String,

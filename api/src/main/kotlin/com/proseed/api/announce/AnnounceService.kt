@@ -5,7 +5,7 @@ import com.proseed.api.announce.dto.AnnounceCreateResponseDto
 import com.proseed.api.announce.model.Announce
 import com.proseed.api.announce.model.AnnounceType
 import com.proseed.api.company.CompanyRepository
-import com.proseed.api.config.exception.CompanyNotFoundException
+import com.proseed.api.config.exception.company.CompanyNotFoundException
 import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.location.LocationRepository
 import com.proseed.api.location.model.Location
