@@ -99,7 +99,7 @@ class AuthService(
                 User(
                     platformId = passwordEncoder.encode(kakaoUserInfo.id),
                     platformType = "KAKAO",
-                    role = Role.USER,
+                    role = Role.UNAUTH,
                     nickName = kakaoUserInfo.properties.nickname,
                     email = email,
                     profileImageUrl = kakaoUserInfo.properties.profile_image,
@@ -142,6 +142,7 @@ class AuthService(
     }
 
     // stage1
+    @Transactional
     fun registerStage1(request: KakaoRegisterStage1Request): UserResponse {
         // messageCheck = 1 검증
         val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
@@ -163,6 +164,7 @@ class AuthService(
     }
 
     // stage2
+    @Transactional
     fun registerStage2(request: KakaoRegisterStage2Request): UserResponse {
         // messageCheck = 1, registerStage = 1 검증
         val user: User = userRepository?.findByEmailAndPlatformId(request.email, request.platformId) ?: throw UserNotFoundException()
@@ -196,8 +198,9 @@ class AuthService(
             throw UserRegisterStageInValidException()
         }
 
-        // userPreference, registerStage = 3 로 업데이트
+        // registerStage = 3 로 업데이트
         user.registerStage = 3
+        user.role = Role.USER
 
         // 내용 저장
         val savedUser = userRepository.save(user)
