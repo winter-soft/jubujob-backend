@@ -9,16 +9,16 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "ANNOUNCE")
 class Announce(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     // Foreign Key
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: User?, // Not null
+    var user: User?, // Not null
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
-    var location: Location? = null,
+    var location: Location?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company?, // Not null

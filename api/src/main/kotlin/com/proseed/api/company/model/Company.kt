@@ -7,7 +7,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "COMPANY")
 class Company(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     // Foreign Key

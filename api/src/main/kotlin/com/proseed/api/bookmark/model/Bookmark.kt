@@ -8,7 +8,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "BOOKMARK")
 class Bookmark(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     // Foreign Key

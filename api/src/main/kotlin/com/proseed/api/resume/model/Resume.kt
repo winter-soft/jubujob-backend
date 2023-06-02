@@ -9,7 +9,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "RESUME")
 class Resume(
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     // Foreign Key
@@ -31,4 +31,13 @@ class Resume(
     var address: String,
 
     ) {
+    constructor() : this(
+        null,
+        null,
+        null,
+        null,
+        null,
+        "",
+        ""
+    )
 }
