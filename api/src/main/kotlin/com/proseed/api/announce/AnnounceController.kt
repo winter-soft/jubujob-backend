@@ -1,6 +1,8 @@
 package com.proseed.api.announce
 
 import com.proseed.api.announce.dto.AnnounceCreateRequestDto
+import com.proseed.api.announce.dto.AnnounceUpdateRequestDto
+import com.proseed.api.common.aop.RoleCheck
 import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.config.exception.user.UserRegisterStageInValidException
 import com.proseed.api.user.model.Role
@@ -29,13 +31,12 @@ class AnnounceController(
         TODO("Not yet implemented")
     }
 
-    @PatchMapping("/{id}")
-    fun update(): ResponseEntity<Any> {
-        TODO("Not yet implemented")
-    }
-
-    @DeleteMapping("/")
-     fun delete(): ResponseEntity<Any> {
-        TODO("Not yet implemented")
+    @PatchMapping("/{announce_id}")
+    fun update(
+        @AuthenticationPrincipal user: User,
+        @RequestBody(required = true) requestDto: AnnounceUpdateRequestDto,
+        @PathVariable announce_id: Long
+    ): ResponseEntity<Any> {
+        return ResponseEntity.ok(announceService.update(user, requestDto, announce_id))
     }
 }
