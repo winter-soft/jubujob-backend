@@ -31,7 +31,7 @@ class Announce(
     var detail: String,
     var imageUrl: String
 ) : TimeZone() {
-
+    // 29536-6380552201a2145d872c
     constructor() : this(
         id = null,
         user = null,

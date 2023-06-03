@@ -7,6 +7,7 @@ import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.config.exception.user.UserRegisterStageInValidException
 import com.proseed.api.user.model.Role
 import com.proseed.api.user.model.User
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -16,6 +17,20 @@ import org.springframework.web.bind.annotation.*
 class AnnounceController(
     val announceService: AnnounceService
 ) {
+    @GetMapping("/{announce_id}")
+    fun select(
+        @PathVariable announce_id: Long
+    ): ResponseEntity<Any> {
+        return ResponseEntity.ok(announceService.select(announce_id))
+    }
+
+    @GetMapping("/")
+    fun selectAll(
+        @RequestParam("type") type: String,
+        pageable: Pageable
+    ): ResponseEntity<Any> {
+        return ResponseEntity.ok(announceService.selectAll(type, pageable))
+    }
 
     @PostMapping("/")
     fun create(
@@ -24,11 +39,6 @@ class AnnounceController(
     ): ResponseEntity<Any> {
 
         return ResponseEntity.ok(announceService.create(user, requestDto))
-    }
-
-    @GetMapping("/{id}")
-    fun select(): ResponseEntity<Any> {
-        TODO("Not yet implemented")
     }
 
     @PatchMapping("/{announce_id}")

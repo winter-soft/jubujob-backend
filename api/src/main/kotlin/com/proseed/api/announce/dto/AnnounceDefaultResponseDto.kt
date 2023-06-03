@@ -10,9 +10,10 @@ import com.proseed.api.location.dto.LocationDefaultDto
 import com.proseed.api.location.model.Location
 import com.proseed.api.user.dto.UserDefaultDto
 import com.proseed.api.user.model.User
+import com.querydsl.core.annotations.QueryProjection
 import jakarta.persistence.Lob
 
-data class AnnounceUpdateResponseDto(
+data class AnnounceDefaultResponseDto(
     val user: UserDefaultDto,
     val location: LocationDefaultDto,
     val company: CompanyDefaultDto,
@@ -22,6 +23,7 @@ data class AnnounceUpdateResponseDto(
     val announce_detail: String,
     val announce_imageUrl: String
 ) {
+    @QueryProjection
     constructor(announce: Announce) : this(
         user = UserDefaultDto(announce?.user ?: throw UserNotFoundException()),
         location = LocationDefaultDto(announce?.location ?: throw LocationNotFoundException()),

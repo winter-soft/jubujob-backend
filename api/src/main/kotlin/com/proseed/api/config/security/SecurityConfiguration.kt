@@ -25,8 +25,10 @@ class SecurityConfiguration(
             .csrf()
             .disable() // csrf 설정을 사용하지 않는다.
             .authorizeHttpRequests() // HttpRequest를 허용하는 Matchers
-            .requestMatchers("/auth/**", "/",
-                "/swagger-ui/**","/swagger-ui.html", "/v3/api-docs/**") // 스웨거 관련 접근 허용
+            .requestMatchers("/auth/**", "/**",)
+//                "/swagger-ui/**","/swagger-ui.html", "/v3/api-docs/**", // 스웨거 관련 접근 허용
+//                "/announce/**"
+//            )
             .permitAll() // 모든 권한 허용
             .anyRequest() // 나머지 요청들은
             .authenticated() // 인증된 사용자만 (인증되지 않은 사용자는 Forbidden Error)

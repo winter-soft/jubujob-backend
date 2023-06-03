@@ -3,21 +3,20 @@ package com.proseed.api.announce
 import com.proseed.api.announce.dto.AnnounceCreateRequestDto
 import com.proseed.api.announce.dto.AnnounceCreateResponseDto
 import com.proseed.api.announce.dto.AnnounceUpdateRequestDto
-import com.proseed.api.announce.dto.AnnounceUpdateResponseDto
+import com.proseed.api.announce.dto.AnnounceDefaultResponseDto
 import com.proseed.api.announce.model.Announce
 import com.proseed.api.announce.model.AnnounceType
 import com.proseed.api.announce.repository.AnnounceRepository
-import com.proseed.api.announce.repository.AnnounceRepositoryCustomImpl
 import com.proseed.api.common.aop.RoleCheck
 import com.proseed.api.company.CompanyRepository
 import com.proseed.api.config.exception.announce.AnnounceNotFoundException
-import com.proseed.api.config.exception.company.CompanyNoMatchingWithUserException
 import com.proseed.api.config.exception.company.CompanyNotFoundException
 import com.proseed.api.config.exception.user.UserForbiddenException
 import com.proseed.api.location.LocationRepository
 import com.proseed.api.location.model.Location
 import com.proseed.api.user.model.Role
 import com.proseed.api.user.model.User
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -64,6 +63,20 @@ class AnnounceService(
         return AnnounceCreateResponseDto(announce)
     }
 
+    fun select(announce_id: Long): Any {
+        // announce_id를 통해 ANNOUNCE 조회
+        val announce = announceRepository?.findByIdJoinAll(announce_id)
+            ?: throw AnnounceNotFoundException()
+
+        // 결과 반환
+        return AnnounceDefaultResponseDto(announce)
+    }
+
+    fun selectAll(type: String, pageable: Pageable): Any {
+        return announceRepository.findSearchAll(AnnounceType.customValueOf(type), pageable)
+            .map { AnnounceDefaultResponseDto(it) }
+    }
+
     @RoleCheck(role = Role.ENTERPRISE)
     @Transactional
     fun update(user: User, requestDto: AnnounceUpdateRequestDto, announce_id: Long): Any {
@@ -96,6 +109,6 @@ class AnnounceService(
         announceRepository.saveAndFlush(announce)
 
         // 결과 반환
-        return AnnounceUpdateResponseDto(announce)
+        return AnnounceDefaultResponseDto(announce)
     }
 }
