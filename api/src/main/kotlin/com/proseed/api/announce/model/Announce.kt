@@ -1,10 +1,14 @@
 package com.proseed.api.announce.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.proseed.api.common.model.TimeZone
 import com.proseed.api.company.model.Company
 import com.proseed.api.location.model.Location
 import com.proseed.api.user.model.User
 import jakarta.persistence.*
+import org.hibernate.annotations.LazyToOne
+import org.hibernate.annotations.LazyToOneOption
 
 @Entity
 @Table(name = "ANNOUNCE")

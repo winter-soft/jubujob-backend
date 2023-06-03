@@ -49,3 +49,9 @@ repositories {
 
 //querydsl 추가
 val querydslDir = "$buildDir/generated/querydsl"
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}

@@ -7,7 +7,7 @@ import jakarta.persistence.PreUpdate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-open class TimeZone(
+class TimeZone(
     @JsonIgnore var createdTime: LocalDateTime? = null,
     @JsonIgnore var updatedTime: LocalDateTime? = null
 ) {
