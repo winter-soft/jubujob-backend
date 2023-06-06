@@ -1,5 +1,6 @@
 package com.proseed.api.config.jpa
 
+import com.querydsl.jpa.JPQLTemplates
 import com.querydsl.jpa.impl.JPAQueryFactory
 
 import jakarta.persistence.EntityManager
@@ -15,6 +16,6 @@ class QueryDslConfig {
 
     @Bean
     fun jpaQueryFactory(): JPAQueryFactory {
-        return JPAQueryFactory(em)
+        return JPAQueryFactory(JPQLTemplates.DEFAULT, em)
     }
 }

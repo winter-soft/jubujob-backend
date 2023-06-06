@@ -5,6 +5,7 @@ import com.proseed.api.company.model.Company
 import com.proseed.api.job.model.Job
 import com.proseed.api.user.model.User
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "RESUME")
@@ -28,8 +29,12 @@ class Resume(
 
     // Parameter
     var title: String,
+    var detail: String,
     var address: String,
-
+    var certificationCheck: Boolean ? = false,
+    var updateCheck: Boolean? = false,
+    var startDay: LocalDateTime = LocalDateTime.now(),
+    var endDay: LocalDateTime = LocalDateTime.now().plusDays(7L)
     ) {
     constructor() : this(
         null,
@@ -37,6 +42,7 @@ class Resume(
         null,
         null,
         null,
+        "",
         "",
         ""
     )
