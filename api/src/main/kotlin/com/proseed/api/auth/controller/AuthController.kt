@@ -11,6 +11,7 @@ import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.user.dto.UserResponse
 import com.proseed.api.user.model.User
 import com.proseed.api.user.UserRepository
+import com.proseed.api.user.dto.UserInfoResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.http.ResponseEntity
@@ -86,8 +87,8 @@ class AuthController(
     @GetMapping("/valid")
     fun isValidToken(
         @AuthenticationPrincipal user: User
-    ): UserResponse {
-        return UserResponse(user)
+    ): ResponseEntity<UserInfoResponse> {
+        return ResponseEntity.ok(UserInfoResponse(user))
     }
 
     @Operation(hidden = true)

@@ -10,11 +10,6 @@ class Company(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    // Foreign Key
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    val user: User?, // Not null
-
     // Parameter
     val name: String,
     val imageUrl: String,
@@ -23,7 +18,6 @@ class Company(
 
     constructor() : this(
         id = null,
-        user = null,
         name = "",
         imageUrl = "",
         introduction = ""

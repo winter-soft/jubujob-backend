@@ -8,9 +8,9 @@ import com.proseed.api.announce.model.Announce
 import com.proseed.api.announce.model.AnnounceType
 import com.proseed.api.announce.repository.AnnounceRepository
 import com.proseed.api.common.aop.RoleCheck
-import com.proseed.api.company.CompanyRepository
+import com.proseed.api.company.repository.CompanyMemberRepository
 import com.proseed.api.config.exception.announce.AnnounceNotFoundException
-import com.proseed.api.config.exception.company.CompanyNotFoundException
+import com.proseed.api.config.exception.companyMember.CompanyMemberNotFoundException
 import com.proseed.api.config.exception.user.UserForbiddenException
 import com.proseed.api.location.LocationRepository
 import com.proseed.api.location.model.Location
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class AnnounceService(
     val announceRepository: AnnounceRepository,
-    val companyRepository: CompanyRepository,
+    val companyMemberRepository: CompanyMemberRepository,
     val locationRepository: LocationRepository
 ) {
 
@@ -33,8 +33,8 @@ class AnnounceService(
     fun create(user: User, requestDto: AnnounceCreateRequestDto): Any {
 
         // 회사사람인지 확인
-        val company = companyRepository?.findByUserAndName(user.id!!, requestDto.company_name)
-            ?: throw CompanyNotFoundException()
+        val companyMember = companyMemberRepository?.findByUserAndName(user, requestDto.company_name)
+            ?: throw CompanyMemberNotFoundException()
 
         // 일치하는 주소가 있는지 확인 없다면 생성
         val location = locationRepository?.findByLatitudeAndLongitudeAndAddress(
@@ -52,7 +52,7 @@ class AnnounceService(
             Announce(
                 user = user,
                 location = location,
-                company = company,
+                company = companyMember.company,
                 type = AnnounceType.valueOf(requestDto.announce_type),
                 title = requestDto.announce_title,
                 detail = requestDto.announce_detail,
