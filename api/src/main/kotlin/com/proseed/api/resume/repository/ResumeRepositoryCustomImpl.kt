@@ -38,6 +38,7 @@ class ResumeRepositoryCustomImpl(
             .join(resume.job, job)
             .join(resume.user, user)
             .join(resume.company, company)
+            .where(user.id.eq(_user.id))
             .orderBy(job.id.asc())
             .orderBy(resume.id.desc())
             .transform(
