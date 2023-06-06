@@ -34,26 +34,6 @@ class AuthService(
     private val restTemplate: RestTemplate
 ) {
 
-    fun authenticate(request: AuthRequest): AuthResponse {
-        authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                request.email,
-                request.platformId
-            )
-        )
-        var user = userRepository.findByEmail(request.email) ?: throw UserNotFoundException()
-
-        if(!passwordEncoder.matches(request.platformId, user.platformId))
-            throw UserNotFoundException()
-
-        val tokenHashMap = HashMap<String, String>()
-        tokenHashMap["id"] = user.id.toString()
-        tokenHashMap["role"] = user.role.toString()
-        var jwtToken = jwtService.generateToken(tokenHashMap, user)
-
-        return AuthResponse(jwtToken)
-    }
-
     fun kakaoLoginPage(): KakaoLoginPageResponse {
         return kakaoValueBuilder.kakaoLoginPageResponse()
     }
@@ -210,6 +190,33 @@ class AuthService(
         tokenHashMap["id"] = user.id.toString()
         tokenHashMap["role"] = user.role.toString()
         val jwtToken = jwtService.generateToken(tokenHashMap, savedUser)
+
+        // 회원가입 결과 반환
+        return AuthResponse(jwtToken)
+    }
+
+    @Transactional
+    fun testUser(): AuthResponse {
+        val user = userRepository.findByEmail("abcdefg")
+            ?:userRepository.save(User(
+            platformId = "abcdefg",
+            platformType = "KAKAO",
+            role = Role.ENTERPRISE,
+            nickName = "테스트 계정",
+            email = "test@test.com",
+            phoneNumber = "010-0000-0000",
+            gender = "male",
+            profileImageUrl = "http://k.kakaocdn.net/dn/bsKq6I/btr5E9S5jol/ABnBzO97fDIG8knP5hUoh1/img_640x640.jpg",
+            preference = "입주관리매니저",
+            messageCheck = true,
+            registerStage = 3
+        ))
+
+        // jwt 토큰 발급
+        val tokenHashMap = HashMap<String, String>()
+        tokenHashMap["id"] = user.id.toString()
+        tokenHashMap["role"] = user.role.toString()
+        val jwtToken = jwtService.generateToken(tokenHashMap, user)
 
         // 회원가입 결과 반환
         return AuthResponse(jwtToken)
