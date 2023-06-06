@@ -197,7 +197,7 @@ class AuthService(
 
     @Transactional
     fun testUser(): AuthResponse {
-        val user = userRepository.findByEmail("abcdefg")
+        val user = userRepository.findByEmail("test@test.com")
             ?:userRepository.save(User(
             platformId = "abcdefg",
             platformType = "KAKAO",

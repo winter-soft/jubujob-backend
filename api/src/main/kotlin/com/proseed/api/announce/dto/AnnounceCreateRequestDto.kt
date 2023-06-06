@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
+import java.time.LocalDateTime
 
 data class AnnounceCreateRequestDto(
     // location 정보
@@ -20,21 +21,6 @@ data class AnnounceCreateRequestDto(
     val announce_title: String,
     val announce_detail: String,
     val announce_imageUrl: String,
-) {
-    companion object {
-        fun ex(): String = ObjectMapper().writeValueAsString(
-            AnnounceCreateRequestDto(
-                "String",
-                0.0,
-                0.0,
-                "String",
-                "String",
-                "String",
-                "String",
-                "String",
-            )
-
-        )
-
-    }
-}
+    val announce_startDay: LocalDateTime,
+    val announce_endDay: LocalDateTime
+)

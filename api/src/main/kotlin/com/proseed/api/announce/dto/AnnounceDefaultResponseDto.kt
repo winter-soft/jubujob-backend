@@ -9,6 +9,7 @@ import com.proseed.api.config.exception.location.LocationNotFoundException
 import com.proseed.api.config.exception.user.UserNotFoundException
 import com.proseed.api.location.dto.LocationDefaultDto
 import com.proseed.api.user.dto.UserDefaultDto
+import java.time.LocalDateTime
 
 data class AnnounceDefaultResponseDto(
     val user: UserDefaultDto,
@@ -19,9 +20,11 @@ data class AnnounceDefaultResponseDto(
     val announce_type: AnnounceType,
     val announce_title: String,
     val announce_detail: String,
-    val announce_imageUrl: String
+    val announce_imageUrl: String,
+    val announce_startDay: LocalDateTime,
+    val announce_endDay: LocalDateTime
 ) {
-    constructor() : this(UserDefaultDto(), LocationDefaultDto(), CompanyDefaultDto(), 0L,AnnounceType.RECRUIT, "", "","")
+    constructor() : this(UserDefaultDto(), LocationDefaultDto(), CompanyDefaultDto(), 0L,AnnounceType.RECRUIT, "", "","", LocalDateTime.now(), LocalDateTime.now().plusDays(7L))
     constructor(announce: Announce) : this(
         user = UserDefaultDto(announce?.user ?: throw UserNotFoundException()),
         location = LocationDefaultDto(announce?.location ?: throw LocationNotFoundException()),
@@ -31,6 +34,9 @@ data class AnnounceDefaultResponseDto(
         announce_type = announce.type,
         announce_title = announce.title,
         announce_detail = announce.detail,
-        announce_imageUrl = announce.imageUrl
+        announce_imageUrl = announce.imageUrl,
+
+        announce_startDay = announce.startDay,
+        announce_endDay = announce.endDay
     )
 }

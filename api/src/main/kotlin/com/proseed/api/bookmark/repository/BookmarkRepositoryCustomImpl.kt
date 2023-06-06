@@ -59,7 +59,9 @@ class BookmarkRepositoryCustomImpl(
                     announce.type.`as`("announce_type"),
                     announce.title.`as`("announce_title"),
                     announce.detail.`as`("announce_detail"),
-                    announce.imageUrl.`as`("announce_imageUrl")
+                    announce.imageUrl.`as`("announce_imageUrl"),
+                    announce.startDay.`as`("announce_startDay"),
+                    announce.endDay.`as`("announce_endDay")
                 )
             )
             .from(bookmark)

@@ -56,7 +56,9 @@ class AnnounceService(
                 type = AnnounceType.valueOf(requestDto.announce_type),
                 title = requestDto.announce_title,
                 detail = requestDto.announce_detail,
-                imageUrl = requestDto.announce_imageUrl
+                imageUrl = requestDto.announce_imageUrl,
+                startDay = requestDto.announce_startDay,
+                endDay = requestDto.announce_endDay
             )
         )
 
@@ -104,6 +106,8 @@ class AnnounceService(
         announce.title = requestDto?.announce_title ?: announce.title
         announce.detail = requestDto?.announce_detail ?: announce.detail
         announce.imageUrl = requestDto?.announce_imageUrl ?: announce.imageUrl
+        announce.startDay = requestDto?.announce_startDay ?: announce.startDay
+        announce.endDay = requestDto?.announce_endDay ?: announce.endDay
 
         // announce 정보 저장
         announceRepository.saveAndFlush(announce)

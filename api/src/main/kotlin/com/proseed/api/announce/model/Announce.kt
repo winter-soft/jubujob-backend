@@ -9,6 +9,7 @@ import com.proseed.api.user.model.User
 import jakarta.persistence.*
 import org.hibernate.annotations.LazyToOne
 import org.hibernate.annotations.LazyToOneOption
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "ANNOUNCE")
@@ -33,7 +34,9 @@ class Announce(
     var title: String,
     @Lob
     var detail: String,
-    var imageUrl: String
+    var imageUrl: String,
+    var startDay: LocalDateTime = LocalDateTime.now(),
+    var endDay: LocalDateTime = LocalDateTime.now().plusDays(7L)
 ) : TimeZone() {
     // 29536-6380552201a2145d872c
     constructor() : this(
