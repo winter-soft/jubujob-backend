@@ -1,6 +1,6 @@
 # spring-boot-project-settting
 
-## 현재 추가된 세팅
+## 현재 세팅
 
 - Kotlin (JDK ver.17)
 - Spring Boot (3.0)
@@ -11,9 +11,9 @@
 - KaKao OAuth 2.0
 - AWS S3 (Upload, Delete)
 - Swagger 3.0
-
-## 추가 예정
-
-- Toss Payments API Module
 - QueryDSL
-- Jenkins (서버 생기면)
+
+## 데이터 베이스 설계
+
+<img width="1815" alt="스크린샷 2023-06-07 오전 3 03 33" src="https://github.com/winter-soft/jubujob-backend/assets/79779676/dcca8d17-477b-449f-89c3-15c9eca0fca4">
+
