@@ -10,4 +10,5 @@ interface AnnounceRepositoryCustom {
 
     open fun findByIdJoinAll(id: Long): Announce? // 모든게 조인된 Announce 리턴
     open fun findSearchAll(type: AnnounceType, pageable: Pageable): Page<Announce>
+    open fun findByIdAndUser(announce_id: Long, user_id: Long): Announce?
 }

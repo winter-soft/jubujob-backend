@@ -44,4 +44,12 @@ class AnnounceRepositoryCustomImpl(
         return PageImpl(query.results, pageable, query.total)
     }
 
+    override fun findByIdAndUser(announce_id: Long, user_id: Long): Announce? {
+        return queryFactory
+            .selectFrom(announce)
+            .innerJoin(announce.user, user).fetchJoin()
+            .where(announce.id.eq(announce_id)
+                .and(user.id.eq(user_id)))
+            .fetchOne()
+    }
 }

@@ -3,9 +3,11 @@ package com.proseed.api.resume.repository
 import com.proseed.api.announce.model.QAnnounce.Companion.announce
 import com.proseed.api.company.dto.CompanyDefaultDto
 import com.proseed.api.company.model.QCompany.Companion.company
+import com.proseed.api.config.exception.resume.ResumeNotMatchingException
 import com.proseed.api.job.model.Job
 import com.proseed.api.job.model.QJob.Companion.job
 import com.proseed.api.resume.dto.ResumeDefaultResponseDto
+import com.proseed.api.resume.dto.ResumeIdRequestDto
 import com.proseed.api.resume.model.QResume.Companion.resume
 import com.proseed.api.resume.model.Resume
 import com.proseed.api.user.dto.UserDefaultDto
@@ -74,5 +76,20 @@ class ResumeRepositoryCustomImpl(
                     )
                 )
             )
+    }
+
+    override fun findResumeList(_user: User, resumes: List<Long>): List<Resume> {
+        val query = queryFactory
+            .selectFrom(resume)
+            .join(resume.user, user)
+            .where(user.id.eq(_user.id)
+                .and(resume.id.`in`(resumes)))
+            .fetch()
+
+        if (query.size != resumes.size) {
+            throw ResumeNotMatchingException()
+        }
+
+        return query
     }
 }
