@@ -8,6 +8,7 @@ data class CompanyDefaultDto(
     val company_imageUrl: String,
     val company_introduction: String
 ) {
+    constructor() : this("","","")
     constructor(company: Company) : this(
         company_name = company.name,
         company_imageUrl = company.imageUrl,

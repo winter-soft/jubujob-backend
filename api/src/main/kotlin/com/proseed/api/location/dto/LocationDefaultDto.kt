@@ -7,6 +7,7 @@ data class LocationDefaultDto(
     val latitude: Double,
     val longitude: Double
 ) {
+    constructor() : this("", 0.0 ,0.0)
     constructor(location: Location) : this(
         address = location.address,
         latitude = location.latitude,

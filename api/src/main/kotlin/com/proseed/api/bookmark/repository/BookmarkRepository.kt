@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface BookmarkRepository : JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
+
+    fun findByUserAndAnnounce(user: User, announce: Announce): Bookmark?
 }
